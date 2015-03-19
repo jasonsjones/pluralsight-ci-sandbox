@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<body ng-app="app">
+    <div class="controller">
+        <h1>Find a Job Today!</h1>
+        <div ng-controller="testCtrl">
+            <div class="list-group">
+                <a class="list-group-item" href="#" ng-repeat="job in jobs">
+                    <h4 class="list-group-item-heading">{{ job.title }}</h4>
+                    <p class="list-group-item-text">{{ job.description }}</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="bower_components/angular/angular.js"></script>
+
+    <script src="app/app.js"></script>
+</body>
