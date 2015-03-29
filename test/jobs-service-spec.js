@@ -4,16 +4,33 @@ var express = require('express');
 var app = express();
 var expect = require('chai').expect;
 var request = require('supertest');
+var Promise = require('bluebird');
 
 var dataSavedJob;
 
 var db = {
+    findJobs: function () {
+        return new Promise(function (resolve, reject) {
+            resolve(['i', 'am', 'an', 'array']);
+        });
+    },
     saveJob: function (job) {
         dataSavedJob = job;
     }
 };
 
 require('../jobs-service')(db, app);
+
+describe('Get Jobs', function () {
+    it('should return a json list of jobs', function (done) {
+        request(app).get('/api/jobs')
+        .expect('Content-Type', /json/)
+        .end(function (err, res) {
+            expect(res.body).to.be.a('Array');
+            done();
+        });
+    });
+});
 
 describe('Save Jobs', function () {
     it('should validate that the title is greater than 4 characters');
