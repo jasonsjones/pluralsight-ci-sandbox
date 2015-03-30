@@ -19,7 +19,7 @@ var db = {
     }
 };
 
-require('../jobs-service')(db, app);
+require('../../jobs-service')(db, app);
 
 describe('Get Jobs', function () {
     it('should return a json list of jobs', function (done) {
