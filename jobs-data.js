@@ -7,11 +7,13 @@ var findJobs = function (query) {
     return Promise.cast(mongoose.model('Job').find(query).exec());
 };
 
+var createJob = Promise.promisify(Job.create, Job);
+
 exports.findJobs = findJobs;
 
 exports.connectDB = Promise.promisify(mongoose.connect, mongoose);
 
-var createJob = Promise.promisify(Job.create, Job);
+exports.saveJob = createJob;
 
 exports.seedJobs = function () {
     return findJobs({}).then(function (collection) {

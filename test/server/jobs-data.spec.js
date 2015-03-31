@@ -12,7 +12,7 @@ function resetJobs() {
     });
 }
 
-describe('Get Jobs', function () {
+describe('DB Get Jobs', function () {
     var jobs;
 
     before(function (done) {
@@ -20,10 +20,14 @@ describe('Get Jobs', function () {
            .then(resetJobs)
            .then(jobsData.seedJobs)
            .then(jobsData.findJobs)
-           .then(function (collection) {
+           .then(function setJobs(collection) {
                jobs = collection;
                done();
            });
+    });
+
+    after(function () {
+        mongoose.connection.close();
     });
 
     it('should never be empty since jobs are seeded', function () {
@@ -36,5 +40,31 @@ describe('Get Jobs', function () {
 
     it('should have a job with a description', function () {
         expect(jobs[0].description).to.not.be.empty;
+    });
+});
+
+describe('DB Save Jobs', function () {
+    var job = {title: 'Cook', description: 'You will be making bagels'};
+    var jobs;
+
+    before(function (done) {
+        jobsData.connectDB('mongodb://localhost/ci-sandbox')
+           .then(resetJobs)
+           .then(function () {
+               return jobsData.saveJob(job);
+           })
+           .then(jobsData.findJobs)
+           .then(function setJobs(collection) {
+               jobs = collection;
+               done();
+           });
+    });
+
+    after(function () {
+        mongoose.connection.close();
+    });
+
+    it('should have one job after saving on job', function () {
+        expect(jobs).to.have.length(1);
     });
 });
